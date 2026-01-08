@@ -1,0 +1,206 @@
+# ndarray-c-nim
+
+Nim bindings for the [ndarray-c](https://github.com/jailop/ndarray-c) library - a numpy-like ndarray library for C with multi-dimensional arrays, OpenMP parallelization, and BLAS-optimized operations.
+
+## Features
+
+- Multi-dimensional arrays (ndim >= 2)
+- OpenMP parallelization
+- BLAS-optimized operations
+- Comprehensive array creation functions
+- Element-wise arithmetic operations
+- Linear algebra operations (matrix multiplication, tensor contractions)
+- Array manipulation (slicing, reshaping, transposing, stacking, concatenation)
+- Comparison and logical operations
+- Aggregation functions (sum, mean, std, min, max)
+- Binary I/O support
+- Automatic Memory Management
+- Copy and Move Semantics
+
+## Installation
+
+### Prerequisites
+
+You need to have the ndarray-c library installed on your system. Follow
+the installation instructions from the [ndarray-c
+repository](https://github.com/jailop/ndarray-c).
+
+### Installing the Nim bindings
+
+```bash
+# Install via nimble (once published)
+nimble install ndarray
+
+# Or clone and use locally
+git clone <this-repo-url>
+cd ndarray-c-nim
+```
+
+## Usage
+
+### Basic Example
+
+```nim
+import ndarray
+
+# Create a 2x3 array of ones (simple int syntax!)
+let arr = newOnes(@[2, 3])
+
+# Set value at position (1, 2)
+arr.set(@[1, 2], 42.0)
+
+# Get value
+let val = arr.get(@[1, 2])
+echo "Value: ", val
+
+# Print the array
+arr.print("My Array", 2)
+
+# No need to free - automatic memory management!
+```
+
+### Array Creation
+
+```nim
+import ndarray
+
+# All arrays are automatically freed when they go out of scope!
+# Use simple int syntax - no .csize_t needed!
+
+# Zeros
+let zeros = newZeros(@[3, 4])
+
+# Ones  
+let ones = newOnes(@[2, 3])
+
+# Full (filled with specific value)
+let fives = newFull(@[2, 3], 5.0)
+
+# Range
+let ranged = newArange(@[2, 5], 0.0, 10.0, 1.0)
+
+# Linspace
+let spaced = newLinspace(@[1, 10], 0.0, 1.0, 10)
+
+# Random normal distribution
+let randNorm = newRandomNormal(@[3, 3], 0.0, 1.0)
+
+# Random uniform distribution
+let randUnif = newRandomUniform(@[2, 4], 0.0, 1.0)
+
+# From existing data
+var data = @[1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+let fromData = newFromData(@[2, 3], data)
+
+# Automatic cleanup when variables go out of scope
+```
+
+### Arithmetic Operations
+
+```nim
+import ndarray
+
+let a = newOnes(@[2, 3])
+let b = newFull(@[2, 3], 2.0)
+
+# Element-wise addition (modifies a in place)
+a.add(b)
+
+# Scalar operations
+a.addScalar(5.0)
+a.mulScalar(2.0)
+
+# Linear combination: a = 2*a + 3*b
+a.axpby(2.0, b, 3.0)
+
+# Print result
+a.print("Result", 2)
+
+# Arrays automatically freed when they go out of scope
+```
+
+### Matrix Operations
+
+```nim
+import ndarray
+
+# Create matrices
+let a = newOnes(@[2, 3])
+let b = newOnes(@[3, 4])
+
+# Matrix multiplication
+let c = a.newMatmul(b)
+c.print("A @ B", 2)
+
+# Transpose
+let at = a.newTranspose()
+at.print("A^T", 2)
+
+# All memory managed automatically!
+```
+
+### Aggregation
+
+```nim
+import ndarray
+
+let arr = newArange(@[3, 4], 0.0, 12.0, 1.0)
+
+# Sum along axis 0
+let sumAxis0 = arr.newAggregate(0, aggrSum)
+sumAxis0.print("Sum along axis 0", 2)
+
+# Mean of all elements
+let meanAll = arr.scalarAggregate(aggrMean)
+echo "Mean of all elements: ", meanAll
+
+# Max along axis 1
+let maxAxis1 = arr.newAggregate(1, aggrMax)
+maxAxis1.print("Max along axis 1", 2)
+```
+
+### Comparison and Logical Operations
+
+```nim
+import ndarray
+
+let a = newArange(@[2, 3], 0.0, 6.0, 1.0)
+
+# Comparison with scalar
+let mask = a.newGreaterScalar(2.5)
+mask.print("Elements > 2.5", 0)
+
+# Where operation (ternary operator)
+let zeros = newZeros(@[2, 3])
+let filtered = newWhere(mask, a, zeros)
+filtered.print("Filtered", 2)
+```
+
+### I/O Operations
+
+```nim
+import ndarray
+
+# Create and save array
+let arr = newArange(@[3, 4], 0.0, 12.0, 1.0)
+if arr.save("mydata.bin"):
+  echo "Array saved successfully"
+
+# Load array
+let loaded = newLoad("mydata.bin")
+loaded.print("Loaded array", 2)
+```
+
+## Building
+
+```bash
+# Compile with dynamic linking (requires libndarray.so)
+nim c -d:release your_program.nim
+
+# You may need to specify library path
+nim c -d:release --passL:"-L/usr/local/lib" --passL:"-lndarray" your_program.nim
+```
+
+## License
+
+BSD 3-Clause License (same as ndarray-c)
