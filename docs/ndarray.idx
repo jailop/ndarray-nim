@@ -1,0 +1,90 @@
+nimTitle	ndarray	ndarray.html	module src/ndarray		0
+nim	NDArray	ndarray.html#NDArray	object NDArray		43
+nim	aggrSum	ndarray.html#aggrSum	AggrType.aggrSum		47
+nim	aggrMean	ndarray.html#aggrMean	AggrType.aggrMean		47
+nim	aggrStd	ndarray.html#aggrStd	AggrType.aggrStd		47
+nim	aggrMax	ndarray.html#aggrMax	AggrType.aggrMax		47
+nim	aggrMin	ndarray.html#aggrMin	AggrType.aggrMin		47
+nim	AggrType	ndarray.html#AggrType	enum AggrType		47
+nim	ALL_AXES	ndarray.html#ALL_AXES	const ALL_AXES		56
+nim	newNDArray	ndarray.html#newNDArray,openArray[csize_t]	proc newNDArray(dims: openArray[csize_t]): NDArray		301
+nim	newZeros	ndarray.html#newZeros,openArray[csize_t]	proc newZeros(dims: openArray[csize_t]): NDArray		309
+nim	newOnes	ndarray.html#newOnes,openArray[csize_t]	proc newOnes(dims: openArray[csize_t]): NDArray		317
+nim	newFull	ndarray.html#newFull,openArray[csize_t],cdouble	proc newFull(dims: openArray[csize_t]; value: cdouble): NDArray		325
+nim	newFromData	ndarray.html#newFromData,openArray[csize_t],openArray[cdouble]	proc newFromData(dims: openArray[csize_t]; data: openArray[cdouble]): NDArray		333
+nim	newRandomUniform	ndarray.html#newRandomUniform,openArray[csize_t],cdouble,cdouble	proc newRandomUniform(dims: openArray[csize_t]; low: cdouble; high: cdouble): NDArray		341
+nim	newRandomNormal	ndarray.html#newRandomNormal,openArray[csize_t],cdouble,cdouble	proc newRandomNormal(dims: openArray[csize_t]; mean: cdouble; stddev: cdouble): NDArray		349
+nim	newArange	ndarray.html#newArange,openArray[csize_t],cdouble,cdouble,cdouble	proc newArange(dims: openArray[csize_t]; start: cdouble; stop: cdouble; step: cdouble): NDArray		357
+nim	newLinspace	ndarray.html#newLinspace,openArray[csize_t],cdouble,cdouble,csize_t	proc newLinspace(dims: openArray[csize_t]; start: cdouble; stop: cdouble;\n            num: csize_t): NDArray		365
+nim	newNDArray	ndarray.html#newNDArray,openArray[int]	proc newNDArray(dims: openArray[int]): NDArray		374
+nim	newZeros	ndarray.html#newZeros,openArray[int]	proc newZeros(dims: openArray[int]): NDArray		380
+nim	newOnes	ndarray.html#newOnes,openArray[int]	proc newOnes(dims: openArray[int]): NDArray		386
+nim	newFull	ndarray.html#newFull,openArray[int],cdouble	proc newFull(dims: openArray[int]; value: cdouble): NDArray		392
+nim	newFromData	ndarray.html#newFromData,openArray[int],openArray[cdouble]	proc newFromData(dims: openArray[int]; data: openArray[cdouble]): NDArray		398
+nim	newRandomUniform	ndarray.html#newRandomUniform,openArray[int],cdouble,cdouble	proc newRandomUniform(dims: openArray[int]; low: cdouble; high: cdouble): NDArray		404
+nim	newRandomNormal	ndarray.html#newRandomNormal,openArray[int],cdouble,cdouble	proc newRandomNormal(dims: openArray[int]; mean: cdouble; stddev: cdouble): NDArray		410
+nim	newArange	ndarray.html#newArange,openArray[int],cdouble,cdouble,cdouble	proc newArange(dims: openArray[int]; start: cdouble; stop: cdouble; step: cdouble): NDArray		416
+nim	newLinspace	ndarray.html#newLinspace,openArray[int],cdouble,cdouble,csize_t	proc newLinspace(dims: openArray[int]; start: cdouble; stop: cdouble; num: csize_t): NDArray		422
+nim	free	ndarray.html#free,NDArray	proc free(arr: NDArray)		429
+nim	copy	ndarray.html#copy,NDArray	proc copy(arr: NDArray): NDArray		436
+nim	get	ndarray.html#get,NDArray,openArray[csize_t]	proc get(arr: NDArray; pos: openArray[csize_t]): cdouble		443
+nim	set	ndarray.html#set,NDArray,openArray[csize_t],cdouble	proc set(arr: NDArray; pos: openArray[csize_t]; value: cdouble)		448
+nim	get	ndarray.html#get,NDArray,openArray[int]	proc get(arr: NDArray; pos: openArray[int]): cdouble		453
+nim	set	ndarray.html#set,NDArray,openArray[int],cdouble	proc set(arr: NDArray; pos: openArray[int]; value: cdouble)		459
+nim	setSlice	ndarray.html#setSlice,NDArray,cint,csize_t,openArray[cdouble]	proc setSlice(arr: NDArray; axis: cint; index: csize_t; values: openArray[cdouble])		465
+nim	fillSlice	ndarray.html#fillSlice,NDArray,cint,csize_t,cdouble	proc fillSlice(arr: NDArray; axis: cint; index: csize_t; value: cdouble)		469
+nim	getSlicePtr	ndarray.html#getSlicePtr,NDArray,cint,csize_t	proc getSlicePtr(arr: NDArray; axis: cint; index: csize_t): ptr cdouble		473
+nim	copySlice	ndarray.html#copySlice,NDArray,cint,csize_t,NDArray,cint,csize_t	proc copySlice(src: NDArray; srcAxis: cint; srcIdx: csize_t; dst: NDArray;\n          dstAxis: cint; dstIdx: csize_t)		477
+nim	getSliceSize	ndarray.html#getSliceSize,NDArray,cint	proc getSliceSize(arr: NDArray; axis: cint): csize_t		482
+nim	print	ndarray.html#print,NDArray,cstring,cint	proc print(arr: NDArray; name: cstring = nil; precision: cint = 2)		486
+nim	add	ndarray.html#add,NDArray,NDArray	proc add(arr: NDArray; other: NDArray): NDArray		491
+nim	mul	ndarray.html#mul,NDArray,NDArray	proc mul(arr: NDArray; other: NDArray): NDArray		496
+nim	addScalar	ndarray.html#addScalar,NDArray,cdouble	proc addScalar(arr: NDArray; scalar: cdouble): NDArray		501
+nim	mulScalar	ndarray.html#mulScalar,NDArray,cdouble	proc mulScalar(arr: NDArray; scalar: cdouble): NDArray		506
+nim	axpby	ndarray.html#axpby,NDArray,cdouble,NDArray,cdouble	proc axpby(arr: NDArray; alpha: cdouble; other: NDArray; beta: cdouble): NDArray		511
+nim	scaleShift	ndarray.html#scaleShift,NDArray,cdouble,cdouble	proc scaleShift(arr: NDArray; alpha: cdouble; beta: cdouble): NDArray		516
+nim	mulScaled	ndarray.html#mulScaled,NDArray,NDArray,cdouble	proc mulScaled(arr: NDArray; other: NDArray; scalar: cdouble): NDArray		521
+nim	mapFn	ndarray.html#mapFn,NDArray,proc(cdouble)	proc mapFn(arr: NDArray; fn: proc (x: cdouble): cdouble {.cdecl.}): NDArray		526
+nim	mapMul	ndarray.html#mapMul,NDArray,proc(cdouble),NDArray,cdouble	proc mapMul(arr: NDArray; fn: proc (x: cdouble): cdouble {.cdecl.}; other: NDArray;\n       alpha: cdouble)		531
+nim	mulAdd	ndarray.html#mulAdd,NDArray,NDArray,NDArray,cdouble,cdouble	proc mulAdd(arr: NDArray; other: NDArray; dest: NDArray; alpha: cdouble;\n       beta: cdouble)		536
+nim	gemv	ndarray.html#gemv,NDArray,NDArray,cdouble,cdouble,NDArray	proc gemv(arr: NDArray; x: NDArray; alpha: cdouble; beta: cdouble; y: NDArray)		540
+nim	clipMin	ndarray.html#clipMin,NDArray,cdouble	proc clipMin(arr: NDArray; minVal: cdouble): NDArray		544
+nim	clipMax	ndarray.html#clipMax,NDArray,cdouble	proc clipMax(arr: NDArray; maxVal: cdouble): NDArray		549
+nim	clip	ndarray.html#clip,NDArray,cdouble,cdouble	proc clip(arr: NDArray; minVal: cdouble; maxVal: cdouble)		554
+nim	abs	ndarray.html#abs,NDArray	proc abs(arr: NDArray)		558
+nim	sign	ndarray.html#sign,NDArray	proc sign(arr: NDArray)		562
+nim	newEqual	ndarray.html#newEqual,NDArray,NDArray	proc newEqual(arr: NDArray; other: NDArray): NDArray		567
+nim	newLess	ndarray.html#newLess,NDArray,NDArray	proc newLess(arr: NDArray; other: NDArray): NDArray		574
+nim	newGreater	ndarray.html#newGreater,NDArray,NDArray	proc newGreater(arr: NDArray; other: NDArray): NDArray		581
+nim	newEqualScalar	ndarray.html#newEqualScalar,NDArray,cdouble	proc newEqualScalar(arr: NDArray; value: cdouble): NDArray		588
+nim	newLessScalar	ndarray.html#newLessScalar,NDArray,cdouble	proc newLessScalar(arr: NDArray; value: cdouble): NDArray		595
+nim	newGreaterScalar	ndarray.html#newGreaterScalar,NDArray,cdouble	proc newGreaterScalar(arr: NDArray; value: cdouble): NDArray		602
+nim	newLogicalAnd	ndarray.html#newLogicalAnd,NDArray,NDArray	proc newLogicalAnd(arr: NDArray; other: NDArray): NDArray		609
+nim	newLogicalOr	ndarray.html#newLogicalOr,NDArray,NDArray	proc newLogicalOr(arr: NDArray; other: NDArray): NDArray		616
+nim	newLogicalNot	ndarray.html#newLogicalNot,NDArray	proc newLogicalNot(arr: NDArray): NDArray		623
+nim	newWhere	ndarray.html#newWhere,NDArray,NDArray,NDArray	proc newWhere(condition: NDArray; x: NDArray; y: NDArray): NDArray		630
+nim	newMatmul	ndarray.html#newMatmul,NDArray,NDArray	proc newMatmul(arr: NDArray; other: NDArray): NDArray		638
+nim	newTensordot	ndarray.html#newTensordot,NDArray,NDArray,openArray[cint],openArray[cint]	proc newTensordot(arr: NDArray; other: NDArray; axesA: openArray[cint];\n             axesB: openArray[cint]): NDArray		645
+nim	newTranspose	ndarray.html#newTranspose,NDArray	proc newTranspose(arr: NDArray): NDArray		655
+nim	reshape	ndarray.html#reshape,NDArray,openArray[int]	proc reshape(arr: NDArray; newDims: openArray[int])		662
+nim	newTake	ndarray.html#newTake,NDArray,cint,csize_t,csize_t	proc newTake(arr: NDArray; axis: cint; start: csize_t; end: csize_t): NDArray		676
+nim	newAggregate	ndarray.html#newAggregate,NDArray,cint,AggrType	proc newAggregate(arr: NDArray; axis: cint; aggrType: AggrType): NDArray		684
+nim	scalarAggregate	ndarray.html#scalarAggregate,NDArray,AggrType	proc scalarAggregate(arr: NDArray; aggrType: AggrType): cdouble		691
+nim	newStack	ndarray.html#newStack,cint,openArray[NDArray]	proc newStack(axis: cint; arrays: openArray[NDArray]): NDArray		696
+nim	newConcat	ndarray.html#newConcat,cint,openArray[NDArray]	proc newConcat(axis: cint; arrays: openArray[NDArray]): NDArray		704
+nim	save	ndarray.html#save,NDArray,string	proc save(arr: NDArray; filename: string): bool		713
+nim	newLoad	ndarray.html#newLoad,string	proc newLoad(filename: string): NDArray		717
+nim	ndim	ndarray.html#ndim,NDArray	proc ndim(arr: NDArray): csize_t		725
+nim	shape	ndarray.html#shape,NDArray	proc shape(arr: NDArray): seq[csize_t]		729
+nimgrp	newones	ndarray.html#newOnes-procs-all	proc		317
+nimgrp	newlinspace	ndarray.html#newLinspace-procs-all	proc		365
+nimgrp	newrandomuniform	ndarray.html#newRandomUniform-procs-all	proc		341
+nimgrp	newfull	ndarray.html#newFull-procs-all	proc		325
+nimgrp	newarange	ndarray.html#newArange-procs-all	proc		357
+nimgrp	newndarray	ndarray.html#newNDArray-procs-all	proc		301
+nimgrp	newzeros	ndarray.html#newZeros-procs-all	proc		309
+nimgrp	newfromdata	ndarray.html#newFromData-procs-all	proc		333
+nimgrp	get	ndarray.html#get-procs-all	proc		443
+nimgrp	newrandomnormal	ndarray.html#newRandomNormal-procs-all	proc		349
+nimgrp	set	ndarray.html#set-procs-all	proc		448
+heading	Examples	ndarray.html#examples	 Examples		0

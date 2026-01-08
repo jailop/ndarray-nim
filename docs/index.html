@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ndarray-c-nim Documentation</title>
+  <link rel="stylesheet" href="nimdoc.out.css">
+  <style>
+    body { max-width: 900px; margin: 0 auto; padding: 20px; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; }
+    h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-top: 30px; }
+    h3 { margin-top: 20px; color: #333; }
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .feature { padding: 10px; background: #f9f9f9; border-left: 3px solid #0066cc; }
+  </style>
+</head>
+<body>
+  <h1>ndarray-c-nim Documentation</h1>
+  
+  <p>Nim bindings for the <a href="https://github.com/jailop/ndarray-c">ndarray-c</a> library - a numpy-like ndarray library for C with multi-dimensional arrays, OpenMP parallelization, and BLAS-optimized operations.</p>
+
+  <h2>Overview</h2>
+  <p>ndarray-c-nim provides a clean, idiomatic Nim interface to the ndarray-c library with automatic memory management through Nim's destructors and move semantics.</p>
+
+  <h2>Features</h2>
+  <div class="feature-list">
+    <div class="feature"><strong>Multi-dimensional arrays</strong> (ndim ≥ 2)</div>
+    <div class="feature"><strong>OpenMP parallelization</strong> for performance</div>
+    <div class="feature"><strong>BLAS-optimized operations</strong> for linear algebra</div>
+    <div class="feature"><strong>Automatic memory management</strong> - no cleanup needed!</div>
+    <div class="feature"><strong>Simple API</strong> - use <code>@[2, 3]</code> instead of <code>@[2.csize_t, 3]</code></div>
+    <div class="feature"><strong>Type-safe</strong> Nim bindings</div>
+  </div>
+
+  <h2>Quick Start</h2>
+  <pre><code>import ndarray
+
+# Create a 2x3 array of ones
+let arr = newOnes(@[2, 3])
+
+# Set value at position (1, 2)
+arr.set(@[1, 2], 42.0)
+
+# Print the array
+arr.print("My Array", 2)
+
+# No cleanup needed - automatic memory management!</code></pre>
+
+  <h2>Documentation</h2>
+  <ul>
+    <li><strong><a href="ndarray.html">Module Reference</a></strong> - Complete API documentation with all available functions, types, and examples</li>
+    <li><strong><a href="theindex.html">Index</a></strong> - Alphabetical index of all symbols</li>
+  </ul>
+
+  <h2>Installation</h2>
+  
+  <h3>Prerequisites</h3>
+  <p>First, install the ndarray-c library:</p>
+  <pre><code>git clone https://github.com/jailop/ndarray-c.git
+cd ndarray-c
+mkdir build && cd build
+cmake ..
+make
+sudo make install</code></pre>
+
+  <h3>Install Nim bindings</h3>
+  <pre><code>nimble install ndarray_c_nim</code></pre>
+
+  <h2>Key API Categories</h2>
+  
+  <h3>Array Creation</h3>
+  <ul>
+    <li><code>newZeros</code>, <code>newOnes</code>, <code>newFull</code></li>
+    <li><code>newFromData</code></li>
+    <li><code>newRandomUniform</code>, <code>newRandomNormal</code></li>
+    <li><code>newArange</code>, <code>newLinspace</code></li>
+  </ul>
+
+  <h3>Element Access</h3>
+  <ul>
+    <li><code>get(pos)</code>, <code>set(pos, value)</code></li>
+    <li><code>setSlice</code>, <code>fillSlice</code>, <code>getSlicePtr</code>, <code>copySlice</code></li>
+  </ul>
+
+  <h3>Arithmetic Operations (In-place)</h3>
+  <ul>
+    <li><code>add</code>, <code>mul</code> - element-wise operations</li>
+    <li><code>addScalar</code>, <code>mulScalar</code> - scalar operations</li>
+    <li><code>axpby</code> - linear combination</li>
+    <li><code>clipMin</code>, <code>clipMax</code>, <code>clip</code> - clipping</li>
+    <li><code>abs</code>, <code>sign</code> - element-wise functions</li>
+  </ul>
+
+  <h3>Comparison and Logical (Returns new array)</h3>
+  <ul>
+    <li><code>newEqual</code>, <code>newLess</code>, <code>newGreater</code></li>
+    <li><code>newEqualScalar</code>, <code>newLessScalar</code>, <code>newGreaterScalar</code></li>
+    <li><code>newLogicalAnd</code>, <code>newLogicalOr</code>, <code>newLogicalNot</code></li>
+    <li><code>newWhere</code> - conditional selection</li>
+  </ul>
+
+  <h3>Linear Algebra (Returns new array)</h3>
+  <ul>
+    <li><code>newMatmul</code> - matrix multiplication</li>
+    <li><code>newTensordot</code> - tensor contraction</li>
+    <li><code>newTranspose</code> - transpose</li>
+  </ul>
+
+  <h3>Array Manipulation</h3>
+  <ul>
+    <li><code>reshape</code> - reshape in-place</li>
+    <li><code>newTake</code> - extract slice</li>
+    <li><code>newStack</code> - stack arrays along new axis</li>
+    <li><code>newConcat</code> - concatenate arrays</li>
+  </ul>
+
+  <h3>Aggregation</h3>
+  <ul>
+    <li><code>newAggregate(axis, type)</code> - aggregate along axis</li>
+    <li><code>scalarAggregate(type)</code> - aggregate all elements</li>
+    <li>Types: <code>aggrSum</code>, <code>aggrMean</code>, <code>aggrStd</code>, <code>aggrMax</code>, <code>aggrMin</code></li>
+  </ul>
+
+  <h3>I/O Operations</h3>
+  <ul>
+    <li><code>save(filename)</code> - save to binary file</li>
+    <li><code>newLoad(filename)</code> - load from binary file</li>
+  </ul>
+
+  <h2>Examples</h2>
+
+  <h3>Matrix Multiplication</h3>
+  <pre><code>import ndarray
+
+let a = newOnes(@[2, 3])
+let b = newOnes(@[3, 4])
+let c = a.newMatmul(b)
+
+c.print("Result", 2)</code></pre>
+
+  <h3>Aggregation</h3>
+  <pre><code>import ndarray
+
+let arr = newArange(@[3, 4], 0.0, 12.0, 1.0)
+
+# Sum along axis 0
+let sumAxis0 = arr.newAggregate(0, aggrSum)
+
+# Mean of all elements
+let meanAll = arr.scalarAggregate(aggrMean)
+echo "Mean: ", meanAll</code></pre>
+
+  <h3>Conditional Operations</h3>
+  <pre><code>import ndarray
+
+let data = newArange(@[2, 3], 0.0, 6.0, 1.0)
+let mask = data.newGreaterScalar(2.5)
+let zeros = newZeros(@[2, 3])
+let filtered = newWhere(mask, data, zeros)
+
+filtered.print("Filtered", 2)</code></pre>
+
+  <h2>Important Notes</h2>
+  <ul>
+    <li><strong>Minimum dimension:</strong> All arrays must have <code>ndim ≥ 2</code></li>
+    <li><strong>Type casting:</strong> The library works with <code>cdouble</code> (C double precision floats)</li>
+    <li><strong>Memory:</strong> Arrays use C heap allocation, managed by Nim destructors</li>
+    <li><strong>Simple syntax:</strong> Use <code>@[2, 3]</code> instead of <code>@[2.csize_t, 3]</code> - both work!</li>
+  </ul>
+
+  <h2>Links</h2>
+  <ul>
+    <li><a href="ndarray.html">Complete API Reference</a></li>
+    <li><a href="https://github.com/jailop/ndarray-c">ndarray-c repository</a></li>
+    <li><a href="https://jailop.github.io/ndarray-c/">ndarray-c API documentation</a></li>
+  </ul>
+
+  <hr style="margin-top: 40px;">
+  <p style="text-align: center; color: #888; font-size: 0.9em;">
+    Generated with Nim's documentation generator
+  </p>
+</body>
+</html>
