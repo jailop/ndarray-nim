@@ -2,6 +2,8 @@
 
 Nim bindings for the [ndarray-c](https://github.com/jailop/ndarray-c) library - a numpy-like ndarray library for C with multi-dimensional arrays, OpenMP parallelization, and BLAS-optimized operations.
 
+[Documentation & API Reference](https://jailop.github.io/ndarray-nim/)
+
 ## Features
 
 - Multi-dimensional arrays (ndim >= 2)
