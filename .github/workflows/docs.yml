@@ -29,7 +29,6 @@ jobs:
 
       - name: Generate documentation
         run: |
-          nimble install -y
           nim doc --project --index:on --outdir:docs src/ndarray.nim
 
       - name: Setup Pages
