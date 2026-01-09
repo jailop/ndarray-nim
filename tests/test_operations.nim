@@ -5,7 +5,7 @@ import std/[unittest, math]
 
 suite "Arithmetic Operations - In Place":
   test "Element-wise addition":
-    let a = newFull(@[2.csize_t, 2], 1.0)
+    var a = newFull(@[2.csize_t, 2], 1.0)
     let b = newFull(@[2.csize_t, 2], 2.0)
     a.add(b)
     
@@ -13,40 +13,40 @@ suite "Arithmetic Operations - In Place":
     check a.get(@[1.csize_t, 1]) == 3.0
 
   test "Element-wise multiplication":
-    let a = newFull(@[2.csize_t, 2], 3.0)
+    var a = newFull(@[2.csize_t, 2], 3.0)
     let b = newFull(@[2.csize_t, 2], 4.0)
     a.mul(b)
     
     check a.get(@[0.csize_t, 0]) == 12.0
 
   test "Add scalar":
-    let arr = newOnes(@[2.csize_t, 2])
+    var arr = newOnes(@[2.csize_t, 2])
     arr.addScalar(5.0)
     
     check arr.get(@[0.csize_t, 0]) == 6.0
     check arr.get(@[1.csize_t, 1]) == 6.0
 
   test "Multiply by scalar":
-    let arr = newFull(@[2.csize_t, 2], 3.0)
+    var arr = newFull(@[2.csize_t, 2], 3.0)
     arr.mulScalar(2.0)
     
     check arr.get(@[0.csize_t, 0]) == 6.0
 
   test "Linear combination (axpby)":
-    let a = newFull(@[2.csize_t, 2], 2.0)
+    var a = newFull(@[2.csize_t, 2], 2.0)
     let b = newFull(@[2.csize_t, 2], 3.0)
     a.axpby(2.0, b, 3.0)  # a = 2*a + 3*b = 4 + 9 = 13
     
     check a.get(@[0.csize_t, 0]) == 13.0
 
   test "Scale and shift":
-    let arr = newFull(@[2.csize_t, 2], 5.0)
+    var arr = newFull(@[2.csize_t, 2], 5.0)
     arr.scaleShift(2.0, 3.0)  # arr = 2*arr + 3 = 10 + 3 = 13
     
     check arr.get(@[0.csize_t, 0]) == 13.0
 
   test "Clipping operations":
-    let arr = newArange(@[1.csize_t, 5], 0.0, 5.0, 1.0)
+    var arr = newArange(@[1.csize_t, 5], 0.0, 5.0, 1.0)
     arr.clipMin(2.0)
     
     check arr.get(@[0.csize_t, 0]) == 2.0  # Was 0, clipped to 2
@@ -54,7 +54,7 @@ suite "Arithmetic Operations - In Place":
 
   test "Absolute value":
     let data = @[-1.0, 2.0, -3.0, 4.0]
-    let arr = newFromData(@[2.csize_t, 2], data)
+    var arr = newFromData(@[2.csize_t, 2], data)
     arr.abs()
     
     check arr.get(@[0.csize_t, 0]) == 1.0
@@ -107,7 +107,7 @@ suite "Aggregation Operations":
 
   test "Scalar max":
     let data = @[1.0, 5.0, 3.0, 2.0]
-    let arr = newFromData(@[2.csize_t, 2], data)
+    var arr = newFromData(@[2.csize_t, 2], data)
     let maxVal = arr.scalarAggregate(aggrMax)
     
     check maxVal == 5.0

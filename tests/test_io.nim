@@ -106,14 +106,14 @@ suite "Logical Operations":
 
 suite "Complex Operations":
   test "Chained operations":
-    let arr = newOnes(@[2.csize_t, 3])
+    var arr = newOnes(@[2.csize_t, 3])
     arr.addScalar(1.0)  # Now 2.0
     arr.mulScalar(3.0)  # Now 6.0
     
     check arr.get(@[0.csize_t, 0]) == 6.0
 
   test "Multiple arrays interaction":
-    let a = newFull(@[2.csize_t, 2], 2.0)
+    var a = newFull(@[2.csize_t, 2], 2.0)
     let b = newFull(@[2.csize_t, 2], 3.0)
     let c = newFull(@[2.csize_t, 2], 4.0)
     

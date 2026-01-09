@@ -33,7 +33,7 @@
 {.push dynlib: "libndarray.so".}
 
 type
-  NdarrayInternal {.importc: "_NDArray", header: "ndarray.h".} = object
+  NdarrayInternal {.importc: "NDArray_", header: "ndarray.h".} = object
     data: ptr cdouble
     dims: ptr csize_t
     ndim: csize_t
@@ -186,16 +186,16 @@ proc c_new_greater_scalar(A: NdarrayPtr, value: cdouble): NdarrayPtr {.
   importc: "ndarray_new_greater_scalar", header: "ndarray.h".}
 
 proc c_logical_and(A: NdarrayPtr, B: NdarrayPtr): NdarrayPtr {.
-  importc: "ndarray_logical_and", header: "ndarray.h".}
+  importc: "ndarray_new_logical_and", header: "ndarray.h".}
 
 proc c_logical_or(A: NdarrayPtr, B: NdarrayPtr): NdarrayPtr {.
-  importc: "ndarray_logical_or", header: "ndarray.h".}
+  importc: "ndarray_new_logical_or", header: "ndarray.h".}
 
 proc c_logical_not(A: NdarrayPtr): NdarrayPtr {.
-  importc: "ndarray_logical_not", header: "ndarray.h".}
+  importc: "ndarray_new_logical_not", header: "ndarray.h".}
 
 proc c_where(condition: NdarrayPtr, x: NdarrayPtr, y: NdarrayPtr): NdarrayPtr {.
-  importc: "ndarray_where", header: "ndarray.h".}
+  importc: "ndarray_new_where", header: "ndarray.h".}
 
 # Linear algebra operations
 proc c_new_tensordot(A: NdarrayPtr, B: NdarrayPtr, axesA: ptr cint, axesB: ptr cint): NdarrayPtr {.
@@ -232,7 +232,7 @@ proc c_save(arr: NdarrayPtr, filename: cstring): cint {.
   importc: "ndarray_save", header: "ndarray.h".}
 
 proc c_load(filename: cstring): NdarrayPtr {.
-  importc: "ndarray_load", header: "ndarray.h".}
+  importc: "ndarray_new_load", header: "ndarray.h".}
 
 {.pop.}
 
