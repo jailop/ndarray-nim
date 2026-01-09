@@ -240,6 +240,8 @@ proc c_load(filename: cstring): NdarrayPtr {.
 proc `=destroy`(arr: var NDArray) =
   ## Automatic destructor called by Nim's memory management
   if arr.handle != nil:
+    when defined(debugDestructor):
+      echo "=destroy called, freeing handle: ", cast[uint](arr.handle)
     c_free(arr.handle)
     arr.handle = nil
 
@@ -488,80 +490,85 @@ proc print*(arr: NDArray, name: cstring = nil, precision: cint = 2) =
   c_print(arr.handle, name, precision)
 
 # Arithmetic operations (modifies self in place)
-proc add*(arr: NDArray, other: NDArray): NDArray {.discardable.} =
-  ## Element-wise addition (modifies arr in place)
+proc add*(arr: var NDArray, other: NDArray): var NDArray {.discardable.} =
+  ## Element-wise addition (modifies arr in place, returns arr for chaining)
   discard c_add(arr.handle, other.handle)
   arr
 
-proc mul*(arr: NDArray, other: NDArray): NDArray {.discardable.} =
-  ## Element-wise multiplication (modifies arr in place)
+proc mul*(arr: var NDArray, other: NDArray): var NDArray {.discardable.} =
+  ## Element-wise multiplication (modifies arr in place, returns arr for chaining)
   discard c_mul(arr.handle, other.handle)
   arr
 
-proc addScalar*(arr: NDArray, scalar: cdouble): NDArray {.discardable.} =
-  ## Add scalar (modifies arr in place)
+proc addScalar*(arr: var NDArray, scalar: cdouble): var NDArray {.discardable.} =
+  ## Add scalar (modifies arr in place, returns arr for chaining)
   discard c_add_scalar(arr.handle, scalar)
   arr
 
-proc mulScalar*(arr: NDArray, scalar: cdouble): NDArray {.discardable.} =
-  ## Multiply by scalar (modifies arr in place)
+proc mulScalar*(arr: var NDArray, scalar: cdouble): var NDArray {.discardable.} =
   discard c_mul_scalar(arr.handle, scalar)
   arr
 
-proc axpby*(arr: NDArray, alpha: cdouble, other: NDArray, beta: cdouble): NDArray {.discardable.} =
+proc axpby*(arr: var NDArray, alpha: cdouble, other: NDArray, beta: cdouble): var NDArray {.discardable.} =
   ## Linear combination: arr = alpha*arr + beta*other
   discard c_axpby(arr.handle, alpha, other.handle, beta)
   arr
 
-proc scaleShift*(arr: NDArray, alpha: cdouble, beta: cdouble): NDArray {.discardable.} =
+proc scaleShift*(arr: var NDArray, alpha: cdouble, beta: cdouble): var NDArray {.discardable.} =
   ## Scale and shift: `arr = alpha*arr + beta`
   discard c_scale_shift(arr.handle, alpha, beta)
   arr
 
-proc mulScaled*(arr: NDArray, other: NDArray, scalar: cdouble): NDArray {.discardable.} =
+proc mulScaled*(arr: var NDArray, other: NDArray, scalar: cdouble): var NDArray {.discardable.} =
   ## Element-wise multiply then scale: `arr = arr * other * scalar`
   discard c_mul_scaled(arr.handle, other.handle, scalar)
   arr
 
-proc mapFn*(arr: NDArray, fn: proc(x: cdouble): cdouble {.cdecl.}): NDArray {.discardable.} =
-  ## Apply function to each element in place
+proc mapFn*(arr: var NDArray, fn: proc(x: cdouble): cdouble {.cdecl.}):
+    var NDArray {.discardable.} =
   discard c_mapfnc(arr.handle, fn)
   arr
 
-proc mapMul*(arr: NDArray, fn: proc(x: cdouble): cdouble {.cdecl.}, 
-             other: NDArray, alpha: cdouble) =
+proc mapMul*(arr: var NDArray, fn: proc(x: cdouble): cdouble {.cdecl.}, 
+             other: NDArray, alpha: cdouble): var NDArray {.discardable.} =
   ## Map function then multiply: arr = func(arr) * other * alpha
   discard c_map_mul(arr.handle, fn, other.handle, alpha)
+  arr
 
-proc mulAdd*(arr: NDArray, other: NDArray, dest: NDArray, alpha: cdouble, beta: cdouble) =
+proc mulAdd*(arr: var NDArray, other: NDArray, dest: NDArray, alpha: cdouble, beta: cdouble): var NDArray {.discardable.} =
   ## Fused multiply-add: `dest = alpha * (arr * other) + beta * dest`
   discard c_mul_add(arr.handle, other.handle, dest.handle, alpha, beta)
+  arr
 
-proc gemv*(arr: NDArray, x: NDArray, alpha: cdouble, beta: cdouble, y: NDArray) =
+proc gemv*(arr: var NDArray, x: NDArray, alpha: cdouble, beta: cdouble, y: NDArray): var NDArray {.discardable.} =
   ## Matrix-vector multiply: `y = alpha * arr * x + beta * y`
   discard c_gemv(arr.handle, x.handle, alpha, beta, y.handle)
+  arr
 
-proc clipMin*(arr: NDArray, minVal: cdouble): NDArray {.discardable.} =
+proc clipMin*(arr: var NDArray, minVal: cdouble): var NDArray {.discardable.} =
   ## Clip values below minimum threshold
   discard c_clip_min(arr.handle, minVal)
   arr
 
-proc clipMax*(arr: NDArray, maxVal: cdouble): NDArray {.discardable.} =
+proc clipMax*(arr: var NDArray, maxVal: cdouble): var NDArray {.discardable.} =
   ## Clip values above maximum threshold
   discard c_clip_max(arr.handle, maxVal)
   arr
 
-proc clip*(arr: NDArray, minVal: cdouble, maxVal: cdouble) =
+proc clip*(arr: var NDArray, minVal: cdouble, maxVal: cdouble): var NDArray {.discardable.} =
   ## Clip values to range `[minVal, maxVal]`
   discard c_clip(arr.handle, minVal, maxVal)
+  arr
 
-proc abs*(arr: NDArray) =
+proc abs*(arr: var NDArray): var NDArray {.discardable.} =
   ## Absolute value (modifies arr in place)
   discard c_abs(arr.handle)
+  arr
 
-proc sign*(arr: NDArray) =
+proc sign*(arr: var NDArray): var NDArray {.discardable.} =
   ## Sign function: -1, 0, or +1 (modifies arr in place)
   discard c_sign(arr.handle)
+  arr
 
 # Comparison operations (returns new array)
 proc newEqual*(arr: NDArray, other: NDArray): NDArray =
