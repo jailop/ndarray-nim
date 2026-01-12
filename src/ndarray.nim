@@ -69,17 +69,17 @@ proc c_set(t: NdarrayPtr, pos: ptr csize_t, value: cdouble) {.
 proc c_get(t: NdarrayPtr, pos: ptr csize_t): cdouble {.
   importc: "ndarray_get", header: "ndarray.h".}
 
-proc c_set_slice(arr: NdarrayPtr, axis: cint, index: csize_t, values: ptr cdouble) {.
+proc c_set_slice(arr: NdarrayPtr, axis: cint, index: csize_t, values: ptr cdouble): NdarrayPtr {.
   importc: "ndarray_set_slice", header: "ndarray.h".}
 
-proc c_fill_slice(arr: NdarrayPtr, axis: cint, index: csize_t, value: cdouble) {.
+proc c_fill_slice(arr: NdarrayPtr, axis: cint, index: csize_t, value: cdouble): NdarrayPtr {.
   importc: "ndarray_fill_slice", header: "ndarray.h".}
 
 proc c_get_slice_ptr(arr: NdarrayPtr, axis: cint, index: csize_t): ptr cdouble {.
   importc: "ndarray_get_slice_ptr", header: "ndarray.h".}
 
-proc c_copy_slice(src: NdarrayPtr, srcAxis: cint, srcIdx: csize_t,
-                  dst: NdarrayPtr, dstAxis: cint, dstIdx: csize_t) {.
+proc c_copy_slice(dst: NdarrayPtr, dstAxis: cint, dstIdx: csize_t,
+                  src: NdarrayPtr, srcAxis: cint, srcIdx: csize_t): NdarrayPtr {.
   importc: "ndarray_copy_slice", header: "ndarray.h".}
 
 proc c_get_slice_size(arr: NdarrayPtr, axis: cint): csize_t {.
@@ -148,8 +148,8 @@ proc c_map_mul(A: NdarrayPtr, fn: proc(x: cdouble): cdouble {.cdecl.},
 proc c_mul_add(A: NdarrayPtr, B: NdarrayPtr, C: NdarrayPtr, alpha: cdouble, beta: cdouble): NdarrayPtr {.
   importc: "ndarray_mul_add", header: "ndarray.h".}
 
-proc c_gemv(A: NdarrayPtr, x: NdarrayPtr, alpha: cdouble, beta: cdouble, y: NdarrayPtr): NdarrayPtr {.
-  importc: "ndarray_gemv", header: "ndarray.h".}
+# proc c_gemv(A: NdarrayPtr, x: NdarrayPtr, alpha: cdouble, beta: cdouble, y: NdarrayPtr): NdarrayPtr {.
+#   importc: "ndarray_gemv", header: "ndarray.h".}
 
 proc c_clip_min(A: NdarrayPtr, minVal: cdouble): NdarrayPtr {.
   importc: "ndarray_clip_min", header: "ndarray.h".}
@@ -700,11 +700,12 @@ proc set*(arr: NDArray, pos: openArray[int], value: cdouble) =
   for p in pos: c_pos.add(csize_t(p))
   arr.set(c_pos, value)
 
-proc setSlice*(arr: NDArray, axis: cint, index: csize_t, values: openArray[cdouble]) =
+proc setSlice*(arr: var NDArray, axis: cint, index: csize_t, values: openArray[cdouble]): var NDArray {.discardable.} =
   ## Sets values along a slice at a specific index on an axis.
   ##
   ## For 2D: axis=0 sets a row, axis=1 sets a column.
   ## For higher dimensions: sets the hyperplane perpendicular to the axis.
+  ## Returns the array to enable method chaining.
   ##
   ## **Parameters:**
   ## * `axis` - The axis along which to set the slice
@@ -714,16 +715,18 @@ proc setSlice*(arr: NDArray, axis: cint, index: csize_t, values: openArray[cdoub
   ## Example:
   ## 
   ## .. code-block:: nim
-  ##   let arr = newZeros(@[3, 4])
+  ##   var arr = newZeros(@[3, 4])
   ##   let rowData = @[1.0, 2.0, 3.0, 4.0]
   ##   arr.setSlice(0, 0, rowData)  # Set first row
-  c_set_slice(arr.handle, axis, index, unsafeAddr values[0])
+  discard c_set_slice(arr.handle, axis, index, unsafeAddr values[0])
+  return arr
 
-proc fillSlice*(arr: NDArray, axis: cint, index: csize_t, value: cdouble) =
+proc fillSlice*(arr: var NDArray, axis: cint, index: csize_t, value: cdouble): var NDArray {.discardable.} =
   ## Fills a slice with a scalar value at a specific index on an axis.
   ##
   ## For 2D: axis=0 fills a row, axis=1 fills a column.
   ## For higher dimensions: fills the hyperplane perpendicular to the axis.
+  ## Returns the array to enable method chaining.
   ##
   ## **Parameters:**
   ## * `axis` - The axis along which to fill the slice
@@ -733,9 +736,10 @@ proc fillSlice*(arr: NDArray, axis: cint, index: csize_t, value: cdouble) =
   ## Example:
   ## 
   ## .. code-block:: nim
-  ##   let arr = newZeros(@[3, 4])
+  ##   var arr = newZeros(@[3, 4])
   ##   arr.fillSlice(0, 1, 5.0)  # Fill second row with 5.0
-  c_fill_slice(arr.handle, axis, index, value)
+  discard c_fill_slice(arr.handle, axis, index, value)
+  return arr
 
 proc getSlicePtr*(arr: NDArray, axis: cint, index: csize_t): ptr cdouble =
   ## Gets a pointer to a slice along an axis.
@@ -750,25 +754,27 @@ proc getSlicePtr*(arr: NDArray, axis: cint, index: csize_t): ptr cdouble =
   ## **Returns:** Pointer to the first element of the slice
   c_get_slice_ptr(arr.handle, axis, index)
 
-proc copySlice*(src: NDArray, srcAxis: cint, srcIdx: csize_t,
-                dst: NDArray, dstAxis: cint, dstIdx: csize_t) =
+proc copySlice*(dst: var NDArray, dstAxis: cint, dstIdx: csize_t,
+                src: NDArray, srcAxis: cint, srcIdx: csize_t): var NDArray {.discardable.} =
   ## Copies a slice from one array to another.
   ##
   ## **Parameters:**
-  ## * `src` - Source array
-  ## * `srcAxis` - Axis in source array
-  ## * `srcIdx` - Index along source axis
   ## * `dst` - Destination array
   ## * `dstAxis` - Axis in destination array  
   ## * `dstIdx` - Index along destination axis
+  ## * `src` - Source array
+  ## * `srcAxis` - Axis in source array
+  ## * `srcIdx` - Index along source axis
   ##
   ## Example:
   ## 
   ## .. code-block:: nim
   ##   let src = newOnes(@[3, 4])
-  ##   let dst = newZeros(@[3, 4])
-  ##   copySlice(src, 0, 0, dst, 0, 1)  # Copy first row of src to second row of dst
-  c_copy_slice(src.handle, srcAxis, srcIdx, dst.handle, dstAxis, dstIdx)
+  ##   var dst = newZeros(@[3, 4])
+  ##   copySlice(dst, 0, 1, src, 0, 0)  # Copy row 0 from src to row 1 of dst
+  discard c_copy_slice(dst.handle, dstAxis, dstIdx, src.handle, srcAxis, srcIdx)
+  return dst
+
 
 proc getSliceSize*(arr: NDArray, axis: cint): csize_t =
   ## Gets the size of a slice along an axis.
@@ -980,21 +986,6 @@ proc mulAdd*(arr: var NDArray, other: NDArray, dest: NDArray, alpha: cdouble, be
   ##   var c = newOnes(@[2, 2])
   ##   a.mulAdd(b, c, 1.0, 2.0)  # c = 1*(2*3) + 2*1 = 8
   discard c_mul_add(arr.handle, other.handle, dest.handle, alpha, beta)
-  arr
-
-proc gemv*(arr: var NDArray, x: NDArray, alpha: cdouble, beta: cdouble, y: NDArray): var NDArray {.discardable.} =
-  ## Matrix-vector multiply: y = alpha * arr * x + beta * y.
-  ##
-  ## BLAS-optimized general matrix-vector multiplication.
-  ##
-  ## **Parameters:**
-  ## * `x` - Input vector
-  ## * `alpha` - Scale factor for matrix-vector product
-  ## * `beta` - Scale factor for y
-  ## * `y` - Output vector (accumulator)
-  ##
-  ## **Returns:** Modified arr (for method chaining)
-  discard c_gemv(arr.handle, x.handle, alpha, beta, y.handle)
   arr
 
 proc clipMin*(arr: var NDArray, minVal: cdouble): var NDArray {.discardable.} =

@@ -1,3 +1,9 @@
 0.3.0
 
 - Updated to ndarray-c version 0.3.0
+
+2026-01-12:
+
+- fillSlice, setSlice, and copySlice enabled for chaining
+- copySlice argument order updated. Destination is first
+- gemv function removed
